@@ -25,7 +25,7 @@ public class ErrorDto
 		IsShow = isShow;
 	}
 
-
+	// private set --> qiraqdan deyisikliyin qarsisini aliriq, ancaq constructor ile set ede bilerler
     public List<string> Errors { get; private set; }
-    public bool IsShow { get; set; }
+    public bool IsShow { get; private set; }
 }
