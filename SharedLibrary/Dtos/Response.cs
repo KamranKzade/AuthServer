@@ -11,12 +11,12 @@ public class Response<T> where T : class
 {
 	public T Data { get; set; }
 	public int StatusCode { get; private set; }
-	public ErrorDto Error { get; set; }
+	public ErrorDto Error { get; private set; }
 
 
 	// Daha tez response-un ugurlu olub olmamasini yoxlamaq
 	[JsonIgnore]
-	public bool IsSuccessfull { get; set; }
+	public bool IsSuccessfull { get; private set; }
 
 
 	public static Response<T> Success(T data, int statusCode) => new Response<T> { Data = data, StatusCode = statusCode, IsSuccessfull = true };
