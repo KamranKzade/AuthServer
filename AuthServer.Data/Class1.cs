@@ -1,4 +1,5 @@
-﻿namespace AuthServer.Data
+﻿
+namespace AuthServer.Data
 {
 	public class Class1
 	{
