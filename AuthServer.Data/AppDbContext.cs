@@ -14,8 +14,11 @@ public class AppDbContext : IdentityDbContext<UserApp, IdentityRole, string>
 	public DbSet<Product> Products { get; set; }
 	public DbSet<UserRefleshToken> UserRefleshTokens { get; set; }
 
+	// Configurationlari Model olaraq yaradiriq, hamisi 1 yerde
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
+		builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
 		base.OnModelCreating(builder);
 	}
 }
