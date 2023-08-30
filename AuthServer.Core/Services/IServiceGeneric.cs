@@ -12,5 +12,5 @@ public interface IServiceGeneric<TEntity, TDto> where TEntity : class where TDto
 	Task<Response<IEnumerable<TDto>>> Where(Expression<Func<TEntity, bool>> predicate);
 	Task<Response<TDto>> AddAsync(TEntity entity);
 	Task<Response<NoDataDto>> UpdateAsync(TEntity entity);
-	Task<Response<NoDataDto>> Remove(TEntity entity);
+	Task<Response<NoDataDto>> RemoveAsync(TEntity entity);
 }
