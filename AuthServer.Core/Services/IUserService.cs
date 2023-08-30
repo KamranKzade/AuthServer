@@ -1,10 +1,5 @@
-﻿using AuthServer.Core.Dtos;
-using SharedLibrary.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SharedLibrary.Dtos;
+using AuthServer.Core.Dtos;
 
 namespace AuthServer.Core.Services;
 
