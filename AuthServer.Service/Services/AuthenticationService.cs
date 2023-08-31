@@ -70,9 +70,24 @@ public class AuthenticationService : IAuthenticationService
 
 	}
 
-	public Task<Response<TokenDto>> CreateTokenByRefleshTokenAsync(string refleshToken)
+	public async Task<Response<TokenDto>> CreateTokenByRefleshTokenAsync(string refleshToken)
 	{
-		throw new NotImplementedException();
+		var existRefleshToken = await _userRefleshTokenService.Where(x => x.Code == refleshToken).SingleOrDefaultAsync();
+
+		if(existRefleshToken == null) return Response<TokenDto>.Fail("Reflesh token not found ",404,true);
+
+		var user = await _userManager.FindByIdAsync(existRefleshToken.UserId);
+
+		if (user == null) return Response<TokenDto>.Fail("User Id not found", 404, true);
+
+		var tokenDto = _tokenService.CreateToken(user);
+
+		existRefleshToken.Code = tokenDto.RefleshToken;
+		existRefleshToken.Expiration = tokenDto.RefleshTokenExpiration;
+
+		await _unitOfWork.CommitAsync();
+
+		return Response<TokenDto>.Success(tokenDto,200);
 	}
 
 	public Task<Response<NoDataDto>> RevokeRefleshTokenAsync(string refleshToken)
