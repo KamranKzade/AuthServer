@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 // TokenOption elave edirik Configure-a 
 // Option pattern --> DI uzerinden appsetting-deki datalari elde etmeye deyilir.
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOptions"));
-builder.Services.Configure<Client>(builder.Configuration.GetSection("Clients"));
+builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
 
 
 var app = builder.Build();
