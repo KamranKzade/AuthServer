@@ -4,6 +4,7 @@ using AuthServer.Core.Models;
 using AuthServer.Core.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configuration;
 using System;
 using System.Collections.Generic;
@@ -66,7 +67,37 @@ public class TokenService : ITokenService
 
 	public TokenDto CreateToken(UserApp userApp)
 	{
-		throw new NotImplementedException();
+		// Tokenle bagli olan melumatlar
+		var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
+		var refleshTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.RefleshTokenExpiration);
+		var securityKey = SignService.GetSymmetricSecurityKey(_tokenOption.SecurityKey);
+
+		// credentiallari yaradiriq
+		SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+		// jwt token aliriq
+		JwtSecurityToken jwttoken = new JwtSecurityToken(
+			issuer: _tokenOption.Issuer,
+			expires: accessTokenExpiration,
+			notBefore: DateTime.MinValue,
+			claims: GetClaims(userApp, _tokenOption.Audience),
+			signingCredentials: credentials);
+
+		// token yaratmaq ucun lazim olan handler
+		var handler = new JwtSecurityTokenHandler();
+
+		// handler uzerinden token yazmaq
+		var token = handler.WriteToken(jwttoken);
+
+		var tokenDto = new TokenDto
+		{
+			AccessToken = token,
+			RefleshToken = CreateRefleshToken(),
+			AccessTokenExpiration = accessTokenExpiration,
+			RefleshTokenExpiration = refleshTokenExpiration,
+		};
+
+		return tokenDto;
 	}
 
 	public ClientTokenDto CreateTokenByClient(Client client)
