@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using AuthServer.Core.Repositories;
 using Microsoft.AspNetCore.Identity;
 using AuthServer.Core.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthServer.Service.Services;
 
@@ -18,7 +19,7 @@ public class AuthenticationService : IAuthenticationService
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IGenericRepository<UserRefleshToken> _userRefleshTokenService;
 
-	public AuthenticationService(IOptions<List<Client>> client, ITokenService tokenService, UserManager<UserApp> userManager, 
+	public AuthenticationService(IOptions<List<Client>> client, ITokenService tokenService, UserManager<UserApp> userManager,
 		IUnitOfWork unitOfWork, IGenericRepository<UserRefleshToken> userRefleshTokenService)
 	{
 		_client = client.Value;
@@ -28,9 +29,31 @@ public class AuthenticationService : IAuthenticationService
 		_userRefleshTokenService = userRefleshTokenService;
 	}
 
-	public Task<Response<TokenDto>> CreateTokenAsync(LogInDto logIn)
+	public async Task<Response<TokenDto>> CreateTokenAsync(LogInDto logIn)
 	{
-		throw new NotImplementedException();
+		if (logIn == null) throw new ArgumentNullException(nameof(logIn));
+
+		var user = await _userManager.FindByEmailAsync(logIn.Email);
+
+		if (user == null) return Response<TokenDto>.Fail("Email or Password is wrong", 400, isShow: true);
+
+		if (!await _userManager.CheckPasswordAsync(user, logIn.Password))
+			return Response<TokenDto>.Fail("Email or Password is wrong", 400, isShow: true);
+
+		var token = _tokenService.CreateToken(user);
+
+		var userRefleshToken = await _userRefleshTokenService.Where(x => x.UserId == user.Id).SingleOrDefaultAsync();
+
+		if (userRefleshToken == null)
+			await _userRefleshTokenService.AddAsync(new UserRefleshToken { UserId = user.Id, Code = token.RefleshToken, Expiration = token.RefleshTokenExpiration });
+		else
+		{
+			userRefleshToken.Code = token.RefleshToken;
+			userRefleshToken.Expiration= token.RefleshTokenExpiration;
+		}
+		await _unitOfWork.CommitAsync();
+
+		return Response<TokenDto>.Success(token, 200);
 	}
 
 	public Task<Response<ClientTokenDto>> CreateTokenByClientAsync(ClientLogInDto clientLogInDto)
