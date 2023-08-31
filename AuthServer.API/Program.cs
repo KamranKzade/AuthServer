@@ -19,6 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // DI lari sisteme tanitmaq
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -36,6 +37,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 		sqlOptions.MigrationsAssembly("AuthServer.Data");
 	});
 });
+
 
 // Identity-ni sisteme tanidiriq
 builder.Services.AddIdentity<UserApp, IdentityRole>(opt =>
