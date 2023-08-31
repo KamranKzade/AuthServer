@@ -1,4 +1,5 @@
 using SharedLibrary.Configuration;
+using AuthServer.Core.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// TokenOption elave edirik Configure-a
+// TokenOption elave edirik Configure-a 
+// Option pattern --> DI uzerinden appsetting-deki datalari elde etmeye deyilir.
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOptions"));
+builder.Services.Configure<Client>(builder.Configuration.GetSection("Clients"));
 
 
 var app = builder.Build();
