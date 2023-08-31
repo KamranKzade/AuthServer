@@ -8,5 +8,5 @@ public interface IAuthenticationService
 	Task<Response<TokenDto>> CreateTokenAsync(LogInDto logIn);
 	Task<Response<TokenDto>> CreateTokenByRefleshTokenAsync(string refleshToken);
 	Task<Response<NoDataDto>> RevokeRefleshTokenAsync(string refleshToken);
-	Task<Response<ClientTokenDto>> CreateTokenByClientAsync(ClientLogInDto clientLogInDto);
+	Response<ClientTokenDto> CreateTokenByClientAsync(ClientLogInDto clientLogInDto);
 }

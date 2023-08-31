@@ -49,16 +49,25 @@ public class AuthenticationService : IAuthenticationService
 		else
 		{
 			userRefleshToken.Code = token.RefleshToken;
-			userRefleshToken.Expiration= token.RefleshTokenExpiration;
+			userRefleshToken.Expiration = token.RefleshTokenExpiration;
 		}
 		await _unitOfWork.CommitAsync();
 
 		return Response<TokenDto>.Success(token, 200);
 	}
 
-	public Task<Response<ClientTokenDto>> CreateTokenByClientAsync(ClientLogInDto clientLogInDto)
+	public Response<ClientTokenDto> CreateTokenByClientAsync(ClientLogInDto clientLogInDto)
 	{
-		throw new NotImplementedException();
+		var client = _client.SingleOrDefault(x => x.Id == clientLogInDto.ClientId && x.Secret == clientLogInDto.ClientSecret);
+
+		if (client == null)
+			return Response<ClientTokenDto>.Fail("ClientId or ClientSecret not found", 404, true);
+
+		var token = _tokenService.CreateTokenByClient(client);
+
+		return Response<ClientTokenDto>.Success(token, 200);
+
+
 	}
 
 	public Task<Response<TokenDto>> CreateTokenByRefleshTokenAsync(string refleshToken)
