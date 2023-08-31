@@ -55,7 +55,7 @@ public class TokenService : ITokenService
 		return userList;
 	}
 
-	private IEnumerable<Claim> GetClaimByClaim(Client client)
+	private IEnumerable<Claim> GetClaimByClient(Client client)
 	{
 		var claims = new List<Claim>();
 		claims.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
@@ -102,6 +102,33 @@ public class TokenService : ITokenService
 
 	public ClientTokenDto CreateTokenByClient(Client client)
 	{
-		throw new NotImplementedException();
+		// Tokenle bagli olan melumatlar
+		var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
+		var securityKey = SignService.GetSymmetricSecurityKey(_tokenOption.SecurityKey);
+
+		// credentiallari yaradiriq
+		SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+		// jwt token aliriq
+		JwtSecurityToken jwttoken = new JwtSecurityToken(
+			issuer: _tokenOption.Issuer,
+			expires: accessTokenExpiration,
+			notBefore: DateTime.MinValue,
+			claims:GetClaimByClient(client),
+			signingCredentials: credentials);
+
+		// token yaratmaq ucun lazim olan handler
+		var handler = new JwtSecurityTokenHandler();
+
+		// handler uzerinden token yazmaq
+		var token = handler.WriteToken(jwttoken);
+
+		var clientTokenDto = new ClientTokenDto
+		{
+			AccessToken = token,
+			AccessTokenExpiration = accessTokenExpiration,
+		};
+
+		return clientTokenDto;
 	}
 }
