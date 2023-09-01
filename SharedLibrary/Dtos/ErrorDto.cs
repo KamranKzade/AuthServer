@@ -8,11 +8,7 @@ namespace SharedLibrary.Dtos;
 
 public class ErrorDto
 {
-    public ErrorDto()
-    {
-        Errors = new List<string>();
-    }
-
+ 
 	public ErrorDto(string error, bool isShow)
 	{
 		Errors.Add(error);
@@ -26,6 +22,6 @@ public class ErrorDto
 	}
 
 	// private set --> qiraqdan deyisikliyin qarsisini aliriq, ancaq constructor ile set ede bilerler
-    public List<string> Errors { get; private set; }
-    public bool IsShow { get; private set; }
+    public List<string> Errors { get; private set; } = new List<string>();
+	public bool IsShow { get; private set; }
 }
