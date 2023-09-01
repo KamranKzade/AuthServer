@@ -36,8 +36,11 @@ public class TokenService : ITokenService
 		return Convert.ToBase64String(numberByte);
 	}
 
-	private IEnumerable<Claim> GetClaims(UserApp userApp, List<string> audiences)
+	private async Task<IEnumerable<Claim>> GetClaims(UserApp userApp, List<string> audiences)
 	{
+		// userin role-larini aliriq
+		var userRoles = await _userManager.GetRolesAsync(userApp);
+
 		var userList = new List<Claim>
 		{
 			new Claim(ClaimTypes.NameIdentifier, userApp.Id),
@@ -46,6 +49,7 @@ public class TokenService : ITokenService
 			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 		};
 		userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
+		userList.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
 
 		return userList;
 	}
@@ -75,7 +79,7 @@ public class TokenService : ITokenService
 			issuer: _tokenOption.Issuer,
 			expires: accessTokenExpiration,
 			notBefore: DateTime.MinValue,
-			claims: GetClaims(userApp, _tokenOption.Audience),
+			claims: GetClaims(userApp, _tokenOption.Audience).Result,
 			signingCredentials: credentials);
 
 		// token yaratmaq ucun lazim olan handler
@@ -109,7 +113,7 @@ public class TokenService : ITokenService
 			issuer: _tokenOption.Issuer,
 			expires: accessTokenExpiration,
 			notBefore: DateTime.MinValue,
-			claims:GetClaimByClient(client),
+			claims: GetClaimByClient(client),
 			signingCredentials: credentials);
 
 		// token yaratmaq ucun lazim olan handler
