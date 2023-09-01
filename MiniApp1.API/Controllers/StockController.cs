@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MiniApp1.API.Controllers;
 
-[Authorize]
+[Authorize(Roles = "admin")]
 [Route("api/[controller]")]
 [ApiController]
 public class StockController : ControllerBase
@@ -17,7 +17,7 @@ public class StockController : ControllerBase
 
 
 		// db-dan userId veya username uzerinden lazimli datalari cek
-		return Ok($"Stock islemleri ==> Username: {userName}-- UserId:{userId.Value}");
+		return Ok($"Stock islemleri ==> Username: {userName} -- UserId:{userId.Value}");
 	}
 
 }
