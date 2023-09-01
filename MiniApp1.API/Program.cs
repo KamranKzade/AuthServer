@@ -15,11 +15,22 @@ builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<CustomTokenOption>();
 builder.Services.AddCustomTokenAuth(tokenOptions);
 
+builder.Services.AddAuthorization(opts =>
+{
+	opts.AddPolicy("BakuPolicy", policy =>
+	{
+		policy.RequireClaim("city", "baku");
+	});
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+	app.UseDeveloperExceptionPage();
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
