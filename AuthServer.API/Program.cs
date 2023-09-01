@@ -12,6 +12,7 @@ using AuthServer.Data.Repositories;
 using AuthServer.Core.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
 				.AddFluentValidation(opts => // FluentValidationlari sisteme tanidiriq
 {
-	opts!.RegisterValidatorsFromAssemblyContaining<Program>();
+	opts!.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -75,6 +76,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+	app.UseDeveloperExceptionPage();
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
