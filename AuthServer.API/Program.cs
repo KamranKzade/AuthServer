@@ -1,18 +1,17 @@
-using SharedLibrary.Configuration;
-using AuthServer.Core.Configuration;
+using AuthServer.Data;
+using AuthServer.Core.Models;
+using SharedLibrary.Exceptions;
+using SharedLibrary.Extentions;
 using AuthServer.Core.Services;
+using AuthServer.Core.UnitOfWork;
 using AuthServer.Service.Services;
+using SharedLibrary.Configuration;
+using FluentValidation.AspNetCore;
 using AuthServer.Core.Repositories;
 using AuthServer.Data.Repositories;
-using AuthServer.Core.UnitOfWork;
-using AuthServer.Data;
+using AuthServer.Core.Configuration;
 using Microsoft.EntityFrameworkCore;
-using AuthServer.Core.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using SharedLibrary.Extentions;
-using FluentValidation.AspNetCore;
-using SharedLibrary.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
