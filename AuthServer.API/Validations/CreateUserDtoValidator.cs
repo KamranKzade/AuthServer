@@ -1,5 +1,5 @@
-﻿using AuthServer.Core.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using AuthServer.Core.Dtos;
 
 namespace AuthServer.API.Validations;
 

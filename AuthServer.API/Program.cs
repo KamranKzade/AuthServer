@@ -67,6 +67,8 @@ builder.Services.AddCustomTokenAuth(tokenOptions);
 
 builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
 
+// Validationlari 1 yere yigib qaytaririq
+builder.Services.UseCustomValidationResponse();
 
 var app = builder.Build();
 
