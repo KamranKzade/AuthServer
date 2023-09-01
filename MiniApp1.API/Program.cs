@@ -10,11 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOptions"));
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<CustomTokenOption>();
 builder.Services.AddCustomTokenAuth(tokenOptions);
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

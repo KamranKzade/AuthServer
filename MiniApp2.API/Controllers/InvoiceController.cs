@@ -9,6 +9,7 @@ namespace MiniApp2.API.Controllers;
 [ApiController]
 public class InvoiceController : ControllerBase
 {
+	[HttpGet]
 	public IActionResult GetInvoice()
 	{
 		var userName = HttpContext.User.Identity.Name;
@@ -16,7 +17,7 @@ public class InvoiceController : ControllerBase
 
 
 		// db-dan userId veya username uzerinden lazimli datalari cek
-		return Ok($"Invoice islemleri ==> Username: {userName}-- UserId:{userId}");
+		return Ok($"Invoice islemleri ==> Username: {userName}-- UserId:{userId.Value}");
 	}
 
 }

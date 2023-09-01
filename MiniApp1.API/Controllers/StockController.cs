@@ -9,6 +9,7 @@ namespace MiniApp1.API.Controllers;
 [ApiController]
 public class StockController : ControllerBase
 {
+	[HttpGet]
 	public IActionResult GetStock()
 	{
 		var userName = HttpContext.User.Identity.Name;
@@ -16,7 +17,7 @@ public class StockController : ControllerBase
 
 
 		// db-dan userId veya username uzerinden lazimli datalari cek
-		return Ok($"Stock islemleri ==> Username: {userName}-- UserId:{userId}");
+		return Ok($"Stock islemleri ==> Username: {userName}-- UserId:{userId.Value}");
 	}
 
 }
