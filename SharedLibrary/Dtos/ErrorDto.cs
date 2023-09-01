@@ -11,7 +11,7 @@ public class ErrorDto
 	public ErrorDto(string error, bool isShow)
 	{
 		Errors.Add(error);
-		isShow = true;
+		IsShow = isShow;
 	}
 
 	public ErrorDto(List<string> errors, bool isShow)
@@ -21,6 +21,6 @@ public class ErrorDto
 	}
 
 	// private set --> qiraqdan deyisikliyin qarsisini aliriq, ancaq constructor ile set ede bilerler
-    public List<string> Errors { get; private set; } = new List<string>();
+	public List<string> Errors { get; private set; } = new List<string>();
 	public bool IsShow { get; private set; }
 }

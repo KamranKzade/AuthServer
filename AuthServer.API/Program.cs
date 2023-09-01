@@ -12,16 +12,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SharedLibrary.Extentions;
 using FluentValidation.AspNetCore;
+using SharedLibrary.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-									
+
 builder.Services.AddControllers()
 				.AddFluentValidation(opts => // FluentValidationlari sisteme tanidiriq
 {
-	opts.RegisterValidatorsFromAssemblyContaining<Program>();
+	opts!.RegisterValidatorsFromAssemblyContaining<Program>();
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -78,7 +79,13 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+// else
+// {
+// 	// Prod-da gorsenmeyi lazimdi
+// 	// app.UseCustomException();
+// }
 
+app.UseCustomException();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
