@@ -8,7 +8,6 @@ namespace SharedLibrary.Dtos;
 
 public class ErrorDto
 {
- 
 	public ErrorDto(string error, bool isShow)
 	{
 		Errors.Add(error);
